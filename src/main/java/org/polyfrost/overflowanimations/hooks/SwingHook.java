@@ -1,10 +1,9 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.mixin.interfaces.EntityLivingBaseInvoker;
 import net.minecraft.client.Minecraft;
+import org.polyfrost.overflowanimations.mixin.interfaces.EntityLivingBaseInvoker;
 
 public class SwingHook {
-
     public static void swingItem() {
         final Minecraft mc = Minecraft.getMinecraft();
         if (!mc.thePlayer.isSwingInProgress ||

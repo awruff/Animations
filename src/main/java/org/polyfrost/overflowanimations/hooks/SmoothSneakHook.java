@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
 public class SmoothSneakHook {
-
     private static float sneakingHeight;
 
     public static void setSneakingHeight(float sneakingHeight) {
@@ -18,5 +17,4 @@ public class SmoothSneakHook {
             return Minecraft.getMinecraft().getRenderViewEntity().getEyeHeight();
         }
     }
-
 }

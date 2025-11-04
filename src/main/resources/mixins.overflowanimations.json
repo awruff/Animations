@@ -2,8 +2,7 @@
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
   "package": "org.polyfrost.overflowanimations.mixin",
-  "refmap": "mixins.${id}.refmap.json",
-  "verbose": true,
+  "refmap": "mixins.${mod_id}.refmap.json",
   "client": [
     "EntityLivingBaseMixin",
     "EntityMixin",
@@ -34,7 +33,6 @@
     "RenderEntityItemMixin",
     "RenderEntityItemMixin_CustomPositions",
     "RendererLivingEntityMixin",
-    "RenderFireballMixin",
     "RenderFishMixin",
     "RenderItemMixin",
     "RenderSnowballMixin",
