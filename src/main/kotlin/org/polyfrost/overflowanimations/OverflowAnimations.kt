@@ -16,9 +16,11 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.polyfrost.overflowanimations.command.OldAnimationsCommand
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings
 import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui
+import org.polyfrost.overflowanimations.init.CustomModelBakery
 import java.net.URI
 
 @Mod(
@@ -29,9 +31,9 @@ import java.net.URI
 )
 object OverflowAnimations {
 
-    const val MODID: String = "@ID@"
-    const val NAME: String = "@NAME@"
-    const val VERSION: String = "@VER@"
+    const val MODID: String = "@MOD_ID@"
+    const val NAME: String = "@MOD_NAME@"
+    const val VERSION: String = "@MOD_VERSION@"
 
     @JvmField
     var isPatcherPresent: Boolean = false
@@ -47,10 +49,10 @@ object OverflowAnimations {
     @JvmField
     var isNEUPresent: Boolean = false;
 
-//    @Mod.EventHandler
-//    fun preInit(event: FMLPreInitializationEvent) {
-//        CustomModelBakery
-//    }
+    @Mod.EventHandler
+    fun preInit(event: FMLPreInitializationEvent) {
+        CustomModelBakery
+    }
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {

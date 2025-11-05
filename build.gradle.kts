@@ -37,3 +37,9 @@ toolkitLoomHelper {
     useProperty("mixin.debug.export", "true", GameSide.CLIENT)
     disableRunConfigs(GameSide.SERVER)
 }
+
+sourceSets {
+    main {
+        output.setResourcesDir(java.classesDirectory)
+    }
+}
