@@ -36,11 +36,18 @@ import java.util.stream.Collectors;
 @Mixin(RenderItem.class)
 public abstract class RenderItemMixin {
 
-    @Shadow @Final private static ResourceLocation RES_ITEM_GLINT;
 
+//    @Shadow
+//    public abstract void renderItem(ItemStack stack, IBakedModel model);
+    @Shadow @Final
+    private static ResourceLocation RES_ITEM_GLINT;
+//    @Unique private ItemStack overflowanimations$stackGui = null;
+//    @Unique private ItemStack overflowanimations$stackHeld = null;
     @Unique private ItemStack overflowanimations$stack = null;
-    @Unique public IBakedModel overflowAnimations$model;
-    @Unique private EntityLivingBase overflowAnimations$entityLivingBase;
+    @Unique
+    public IBakedModel overflowAnimations$model;
+    @Unique
+    private EntityLivingBase overflowAnimations$entityLivingBase;
 
     @Inject(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
     private void overflowAnimations$setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
@@ -133,6 +140,35 @@ public abstract class RenderItemMixin {
         }
     }
 
+    @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
+    public IBakedModel overflowAnimations$rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
+        EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
+        if (entityplayer != null && OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
+            Item item = stack.getItem();
+            String inventory = "inventory";
+            if (stack == entityplayer.getHeldItem()) {
+                ModelResourceLocation modelresourcelocation = null;
+                if (item instanceof ItemBow && entityplayer.getItemInUse() != null) {
+                    int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
+                    if (i >= 18) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_2", inventory);
+                    } else if (i > 13) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_1", inventory);
+                    } else if (i > 0) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_0", inventory);
+                    }
+                } else if (item instanceof ItemFishingRod && entityplayer.fishEntity != null) {
+                    modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", inventory);
+                } else {
+                    modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
+                } if (modelresourcelocation != null) {
+                    return instance.getModelManager().getModel(modelresourcelocation);
+                }
+            }
+        }
+        return instance.getItemModel(stack);
+    }
+
     @Inject(
             method = "renderItemIntoGUI",
             at = @At(
@@ -141,6 +177,7 @@ public abstract class RenderItemMixin {
     )
     public void overflowAnimations$renderGuiGlint(ItemStack stack, int x, int y, CallbackInfo ci) {
         if (OldAnimationsSettings.potionGlint && stack.getItem() instanceof ItemPotion) return;
+//        if (OldAnimationsSettings.oldPotionsGui && stack.getItem() instanceof ItemPotion) return;
         if (OverflowAnimations.isNEUPresent) return;
         if (OldAnimationsSettings.enchantmentGlintGui && OldAnimationsSettings.INSTANCE.enabled && stack.hasEffect()) {
             GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
@@ -201,5 +238,102 @@ public abstract class RenderItemMixin {
         overflowanimations$stack = stack;
         return stack;
     }
+
+//    @ModifyVariable(
+//            method = "renderItemModelTransform",
+//            at = @At(
+//                    value = "HEAD",
+//                    ordinal = 0
+//            ),
+//            index = 1,
+//            argsOnly = true
+//    )
+//    private ItemStack overflowAnimations$captureHeldStack(ItemStack stack) {
+//        overflowanimations$stackHeld = stack;
+//        return stack;
+//    }
+//
+//    @ModifyArg(
+//            method = "renderItemModelTransform",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+//            ),
+//            index = 1
+//    )
+//    private IBakedModel overflowAnimations$swapToCustomModel(IBakedModel model) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return model;
+//        if (overflowanimations$stackHeld.getItem() instanceof ItemPotion) {
+//            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+//        }
+//        return model;
+//    }
+//
+//    @Inject(
+//            method = "renderItemModelTransform",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+//                    shift = At.Shift.AFTER
+//            )
+//    )
+//    private void overflowAnimations$renderCustomBottle(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return;
+//
+//        if (stack.getItem() instanceof ItemPotion) {
+//            renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(stack));
+//        }
+//    }
+//
+//    @ModifyVariable(
+//            method = "renderItemIntoGUI",
+//            at = @At(
+//                    value = "HEAD",
+//                    ordinal = 0
+//            ),
+//            index = 1,
+//            argsOnly = true
+//    )
+//    private ItemStack overflowAnimations$captureGuiStack(ItemStack stack) {
+//        overflowanimations$stackGui = stack;
+//        return stack;
+//    }
+//
+//    @ModifyArg(
+//            method = "renderItemIntoGUI",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+//            ),
+//            index = 1
+//    )
+//    private IBakedModel overflowAnimations$swapToCustomModel2(IBakedModel model) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsGui) return model;
+//        if (overflowanimations$stackGui.getItem() instanceof ItemPotion) {
+//            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+//        }
+//        return model;
+//    }
+//
+//    @Inject(
+//            method = "renderItemIntoGUI",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+//                    shift = At.Shift.AFTER
+//            )
+//    )
+//    private void overflowAnimations$renderCustomBottle2(ItemStack stack, int x, int y, CallbackInfo ci) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsGui) return;
+//
+//        if (stack.getItem() instanceof ItemPotion) {
+//            renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(stack));
+//        }
+//    }
+//
+//    @Unique
+//    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
+//        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
+//    }
 
 }

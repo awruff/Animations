@@ -11,12 +11,13 @@ import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.util.MathUtils;
 
 public class DebugCrosshairHook {
+
     public static void renderDirections(float partialTicks, Minecraft mc) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) (UResolution.getScaledWidth() / 2), (float) (UResolution.getScaledHeight() / 2), 100);
+        GlStateManager.translate((float)(UResolution.getScaledWidth() / 2), (float)(UResolution.getScaledHeight() / 2), 100);
         Entity entity = mc.getRenderViewEntity();
         GlStateManager.rotate(MathUtils.interp(entity.prevRotationPitch, entity.rotationPitch, partialTicks), -1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(MathUtils.interp(entity.prevRotationYaw, entity.rotationYaw, partialTicks), 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(MathUtils.interp(entity.prevRotationYaw , entity.rotationYaw, partialTicks), 0.0F, 1.0F, 0.0F);
         GlStateManager.scale(-1.0F, -1.0F, -1.0F);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
@@ -49,4 +50,5 @@ public class DebugCrosshairHook {
         GlStateManager.enableTexture2D();
         GlStateManager.popMatrix();
     }
+
 }

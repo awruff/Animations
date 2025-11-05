@@ -9,6 +9,7 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.mixin.interfaces.RendererLivingEntityInvoker;
 
 public class HitColorHook {
+
     public static void renderHitColorPre(EntityLivingBase entitylivingbaseIn, boolean bl, float partialTicks, RendererLivingEntity<?> instance) {
         float brightness = entitylivingbaseIn.getBrightness(partialTicks);
         int i = ((RendererLivingEntityInvoker) instance).invokeGetColorMultiplier(entitylivingbaseIn, brightness, partialTicks);
@@ -40,4 +41,5 @@ public class HitColorHook {
         }
         Minecraft.getMinecraft().entityRenderer.enableLightmap();
     }
+
 }
