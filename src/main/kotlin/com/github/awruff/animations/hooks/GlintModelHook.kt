@@ -13,7 +13,7 @@ import net.minecraft.client.resources.model.SimpleBakedModel
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
-import com.github.awruff.animations.mixin.interfaces.RenderItemInvoker
+import com.github.awruff.animations.mixins.interfaces.RenderItemInvoker
 
 object GlintModelHook {
 

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import org.polyfrost.damagetint.config.DamageTintConfig;
 import com.github.awruff.animations.Animations;
-import com.github.awruff.animations.mixin.interfaces.RendererLivingEntityInvoker;
+import com.github.awruff.animations.mixins.interfaces.RendererLivingEntityInvoker;
 
 public class HitColorHook {
     public static void renderHitColorPre(EntityLivingBase entitylivingbaseIn, boolean bl, float partialTicks, RendererLivingEntity<?> instance) {
