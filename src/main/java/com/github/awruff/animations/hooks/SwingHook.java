@@ -1,7 +1,7 @@
 package com.github.awruff.animations.hooks;
 
 import net.minecraft.client.Minecraft;
-import com.github.awruff.animations.mixins.interfaces.EntityLivingBaseInvoker;
+import com.github.awruff.animations.mixin.interfaces.EntityLivingBaseInvoker;
 
 public class SwingHook {
     public static void swingItem() {
